@@ -3,11 +3,13 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from auth.auth_router import router as auth_router
 from Config import Config
 from database import init_db
 from routers.identify_router import router as identify_router
+from routers.introduce_router import router as disease_router
 from routers.users_router import router as users_router
 
 
@@ -32,6 +34,14 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 app.include_router(identify_router, prefix="/api/v1")
+app.include_router(disease_router, prefix="/api/v1")
+
+# 静态文件目录
+app.mount(
+    "/static",
+    StaticFiles(directory="static"),
+    name="static",
+)
 
 
 if __name__ == "__main__":
