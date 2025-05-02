@@ -1,108 +1,133 @@
 # 眼疾识别系统后端
 
-这是一个基于深度学习的眼疾识别系统后端，提供眼部疾病识别、用户管理和疾病建议等功能。
+基于FastAPI构建的眼部疾病识别系统后端服务，提供眼部图像上传、疾病识别、用户认证等功能。
 
-## 功能特点
+## 项目概述
 
-- **眼疾识别**：上传眼部图像，自动识别可能存在的眼部疾病
-- **用户管理**：用户注册、登录、管理个人信息
-- **识别记录**：保存并查询历史识别记录
-- **疾病建议**：根据识别结果、年龄和性别给出针对性建议
-- **RESTful API**：提供标准化的API接口
+本系统能够通过分析用户上传的眼部图像，识别可能存在的眼部疾病，包括但不限于：
+
+- 白内障 (Cataract)
+- 青光眼 (Glaucoma)
+- 糖尿病视网膜病变 (Diabetic Retinopathy)
+- 黄斑变性 (Macular Degeneration)
+- 高血压眼病 (Hypertensive Retinopathy)
+- 近视 (Myopia)
+- 其他眼部疾病
+
+系统采用深度学习模型进行眼部疾病识别，并结合Grad-CAM技术提供可视化解释，帮助用户理解模型关注的区域。
 
 ## 技术栈
 
-- **FastAPI**：高性能的Python Web框架
-- **SQLAlchemy**：ORM数据库操作
-- **TensorFlow**：深度学习模型支持
-- **JWT认证**：用户身份验证
-- **异步处理**：利用异步特性提高并发性能
+- **框架**: FastAPI
+- **数据库**: SQLite/PostgreSQL
+- **认证**: JWT (JSON Web Tokens)
+- **机器学习**: TensorFlow
+- **可视化**: Grad-CAM
 
-## 快速开始
+## 项目结构
+
+``` bash
+.
+├── Config.py                # 配置文件
+├── database.py              # 数据库连接
+├── main.py                  # 主程序入口
+├── pyproject.toml           # 项目依赖
+├── auth/                    # 认证相关
+│   ├── auth_handler.py      # 认证处理
+│   └── auth_router.py       # 认证路由
+├── eye_identify/            # 眼疾识别核心
+│   ├── GradCam.py           # 模型可视化
+│   ├── identify.py          # 识别实现
+│   └── model.h5             # 预训练模型
+├── models/                  # 数据模型
+│   ├── EyeIdentification.py # 识别记录模型
+│   ├── IdentifySuggestions.py # 建议模型
+│   ├── UserRating.py        # 用户评分模型
+│   └── Users.py             # 用户模型
+├── routers/                 # API路由
+│   ├── identify_router.py   # 识别相关路由
+│   ├── introduce_router.py  # 疾病介绍路由
+│   └── users_router.py      # 用户相关路由
+├── static/                  # 静态资源
+│   └── disease_images/      # 疾病图像
+├── uploads/                 # 上传目录
+└── utils/                   # 工具函数
+```
+
+## 主要功能
+
+### 1. 眼部疾病识别
+
+- 上传眼部图像进行疾病识别
+- 返回可能的疾病类型及其置信度
+- 提供疾病详细描述和建议
+
+### 2. 用户管理
+
+- 用户注册/登录
+- JWT token认证
+- 用户历史记录管理
+
+### 3. 疾病介绍
+
+- 提供常见眼疾的详细介绍
+- 包含症状、原因、治疗方法等信息
+
+## API文档
+
+启动服务后，访问 `http://localhost:8000/docs` 可查看完整的API文档。
+
+### 主要API端点
+
+#### 认证相关
+
+- `POST /api/v1/auth/register` - 用户注册
+- `POST /api/v1/auth/login` - 用户登录
+
+#### 识别相关
+
+- `POST /api/v1/identify/eye` - 上传眼部图像进行识别
+- `GET /api/v1/identify/history` - 获取历史识别记录
+- `GET /api/v1/identify/history/{identification_id}` - 获取特定识别记录详情
+- `POST /api/v1/identify/suggestion` - 获取眼疾建议
+
+#### 疾病介绍
+
+- `GET /api/v1/disease/` - 获取所有疾病介绍
+
+## 安装与运行
 
 ### 环境要求
 
-- Python 3.10+
-- 依赖包：详见 `pyproject.toml`
+- Python 3.9+
+- TensorFlow 2.0+
+- FastAPI
+- SQLAlchemy
 
-### 安装依赖
+### 安装步骤
+
+1. 克隆代码库
 
 ```bash
-# 使用uv安装依赖
+git clone https://github.com/StillMisty/eyeBackend
+```
+
+2. 同步虚拟环境并且安装依赖
+
+```bash
+# 使用 UV 管理虚拟环境，https://docs.astral.sh/uv/
 uv sync
 ```
 
-### 配置
+3. 修改配置
+编辑 `Config.py` 文件，根据实际情况配置数据库连接、JWT密钥等
 
-修改 `Config.py` 文件，配置服务器设置、数据库连接、认证参数等。
-
-### 运行服务
+4. 启动服务
 
 ```bash
 uv run python main.py
 ```
 
-服务默认运行在 http://localhost:8000
+## 许可证
 
-## API文档
-
-启动服务后，可访问以下地址查看API文档：
-
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
-
-## 主要API接口
-
-### 用户接口
-
-- `POST /api/v1/auth/register` - 用户注册
-- `POST /api/v1/auth/login` - 用户登录
-- `GET /api/v1/users/me` - 获取当前用户信息
-- `PUT /api/v1/users/me` - 更新当前用户信息
-
-### 眼疾识别接口
-
-- `POST /api/v1/identify/eye` - 上传眼部图像进行识别
-- `GET /api/v1/identify/history` - 获取识别历史记录
-- `GET /api/v1/identify/history/{identification_id}` - 获取特定识别记录详情
-- `GET /api/v1/identify/images/{identification_id}` - 获取识别图像
-- `POST /api/v1/identify/suggestion` - 获取疾病建议
-- `DELETE /api/v1/identify/history/{identification_id}` - 删除识别记录
-
-## 项目结构
-
-```
-eyeBackend/
-├── auth/                   # 用户认证相关模块
-├── entity/                 # 数据实体定义
-├── eye_identify/           # 眼疾识别核心功能
-│   └── model.h5            # 深度学习模型文件
-├── models/                 # 数据库模型定义
-├── routers/                # API路由处理
-├── uploads/                # 上传图像存储目录
-├── utils/                  # 工具函数
-├── Config.py               # 系统配置
-├── database.py             # 数据库连接配置
-├── main.py                 # 应用主入口
-└── pyproject.toml          # 项目依赖配置
-```
-
-## 眼疾识别模型
-
-系统使用预训练的深度学习模型，可以识别37种眼部疾病类型，包括：
-
-- 糖尿病视网膜病变 (Diabetic Retinopathy)
-- 青光眼 (Glaucoma)
-- 白内障 (Cataract)
-- 年龄相关性黄斑变性 (Age-related Macular Degeneration)
-- 高度近视 (Pathological Myopia)
-- 以及其他多种眼部疾病
-
-## 数据存储
-
-- 识别图像按照年/月/日的目录结构存储在 `uploads` 文件夹下
-- 用户数据、识别记录等信息存储在SQLite数据库中 (eye.db)
-
-## 授权许可
-
-版权所有 © 2025
+本项目遵循 Apache 许可证。有关详细信息，请参阅 [LICENSE](LICENSE) 文件。

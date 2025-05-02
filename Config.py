@@ -18,8 +18,8 @@ class Config(ConfigDict):
 
     # 数据库配置
     DATABASE_CONFIG: Dict[str, Any] = {
-        "url": "sqlite:///./eye.db",
-        "connect_args": {"check_same_thread": False},  # 仅SQLite需要此参数
+        "url": "postgresql+psycopg://username:password@localhost:5432/eye",  # 数据库连接URL，务必根据实际情况修改
+        "connect_args": {},  # 连接配置参数
         "autocommit": False,
         "autoflush": False,
     }
