@@ -77,29 +77,11 @@
 
 启动服务后，访问 `http://localhost:8000/docs` 可查看完整的API文档。
 
-### 主要API端点
-
-#### 认证相关
-
-- `POST /api/v1/auth/register` - 用户注册
-- `POST /api/v1/auth/login` - 用户登录
-
-#### 识别相关
-
-- `POST /api/v1/identify/eye` - 上传眼部图像进行识别
-- `GET /api/v1/identify/history` - 获取历史识别记录
-- `GET /api/v1/identify/history/{identification_id}` - 获取特定识别记录详情
-- `POST /api/v1/identify/suggestion` - 获取眼疾建议
-
-#### 疾病介绍
-
-- `GET /api/v1/disease/` - 获取所有疾病介绍
-
 ## 安装与运行
 
 ### 环境要求
 
-- Python 3.9+
+- Python 3.12+
 - TensorFlow 2.0+
 - FastAPI
 - SQLAlchemy
@@ -110,6 +92,7 @@
 
 ```bash
 git clone https://github.com/StillMisty/eyeBackend
+cd eyeBackend
 ```
 
 2. 同步虚拟环境并且安装依赖

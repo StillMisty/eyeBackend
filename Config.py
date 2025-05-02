@@ -14,7 +14,7 @@ class Config(ConfigDict):
     }
 
     # DeepSeek API配置
-    DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_API_KEY: str = ""  # DeepSeek API密钥，务必根据实际情况修改
 
     # 数据库配置
     DATABASE_CONFIG: Dict[str, Any] = {
@@ -26,7 +26,7 @@ class Config(ConfigDict):
 
     # JWT认证配置
     JWT_CONFIG: Dict[str, Any] = {
-        "secret_key": "114514",
+        "secret_key": "114514",  # JWT密钥，务必根据实际情况修改
         "algorithm": "HS256",
         "access_token_expire_minutes": 120,
     }
