@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./static:/app/static
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql+psycopg://eye:eyepassword@db:5432/eye
+      - DEEPSEEK_API_KEY=your_deepseek_api_key_here  # 设置您的 DeepSeek API 密钥
+      - JWT_SECRET_KEY=your_jwt_secret_key_here  # 设置您的 JWT 密钥
+    restart: unless-stopped
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=eye
+      - POSTGRES_PASSWORD=eyepassword
+      - POSTGRES_DB=eye
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

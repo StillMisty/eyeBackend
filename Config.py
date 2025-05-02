@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Any, Dict
 
@@ -14,11 +15,13 @@ class Config(ConfigDict):
     }
 
     # DeepSeek API配置
-    DEEPSEEK_API_KEY: str = ""  # DeepSeek API密钥，务必根据实际情况修改
+    DEEPSEEK_API_KEY: str = os.environ.get("DEEPSEEK_API_KEY", "")  # 从环境变量获取
 
     # 数据库配置
     DATABASE_CONFIG: Dict[str, Any] = {
-        "url": "postgresql+psycopg://username:password@localhost:5432/eye",  # 数据库连接URL，务必根据实际情况修改
+        "url": os.environ.get(
+            "DATABASE_URL", "postgresql+psycopg://username:password@localhost:5432/eye"
+        ),  # 从环境变量获取
         "connect_args": {},  # 连接配置参数
         "autocommit": False,
         "autoflush": False,
@@ -26,7 +29,7 @@ class Config(ConfigDict):
 
     # JWT认证配置
     JWT_CONFIG: Dict[str, Any] = {
-        "secret_key": "114514",  # JWT密钥，务必根据实际情况修改
+        "secret_key": os.environ.get("JWT_SECRET_KEY", "114514"),  # 从环境变量获取
         "algorithm": "HS256",
         "access_token_expire_minutes": 120,
     }
