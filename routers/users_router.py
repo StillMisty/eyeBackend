@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from math import ceil
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, field_validator
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
@@ -10,6 +10,7 @@ from auth.auth_handler import get_current_user
 from database import get_db
 from models.UserRating import UserRating
 from models.Users import Gender, Users
+from utils import is_valid_comment
 
 # 创建路由
 router = APIRouter(
@@ -118,6 +119,12 @@ def create_rating(
     """
     添加用户评分和评论
     """
+    # 检查评论内容是否有效（如果提供了评论）
+    if rating_data.comment:
+        is_valid, reason = is_valid_comment(rating_data.comment)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=f"评论无效: {reason}")
+
     # 创建新的评分记录
     new_rating = UserRating(
         user_id=current_user.id, rating=rating_data.rating, comment=rating_data.comment
