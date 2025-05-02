@@ -161,6 +161,9 @@ def get_details_by_disease_name(disease_name: str):
     return disease2details.get(disease_name, None)
 
 
+if Config.DEEPSEEK_API_KEY is None or Config.DEEPSEEK_API_KEY == "":
+    raise ValueError("请在环境变量中设置 DEEPSEEK_API_KEY")
+
 client = AsyncOpenAI(
     api_key=Config.DEEPSEEK_API_KEY, base_url="https://api.deepseek.com"
 )

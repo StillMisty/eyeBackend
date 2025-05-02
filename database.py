@@ -29,6 +29,7 @@ def init_db():
     # 导入所有模型，确保它们已注册到Base中
     from models.EyeIdentification import EyeIdentification  # noqa: F401
     from models.IdentifySuggestions import IdentifySuggestions  # noqa: F401
+    from models.UserRating import UserRating  # noqa: F401
     from models.Users import Users  # noqa: F401
 
     # 创建所有表

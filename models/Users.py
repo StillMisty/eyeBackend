@@ -29,6 +29,8 @@ class Users(Base):
 
     # 关联眼部识别记录
     eye_identifications = relationship("EyeIdentification", back_populates="user")
+    # 关联用户评分
+    ratings = relationship("UserRating", back_populates="user")
 
     def __init__(self, account, password, birth_date=None, gender=None):
         """
