@@ -91,6 +91,7 @@
 1. 克隆代码库
 
 ```bash
+# 需下载git-lfs以同步模型文件
 git clone https://github.com/StillMisty/eyeBackend
 cd eyeBackend
 ```
